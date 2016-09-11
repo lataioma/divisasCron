@@ -18,6 +18,10 @@ import javax.net.ssl.HttpsURLConnection;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SchedulerFactory;
+import org.quartz.impl.StdSchedulerFactory;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -32,39 +36,13 @@ import models.Divisa;
 public class Tarea implements Job{
 	
 	private final String API="cf9ec84e98574bb7bd65d94434162332";
-	FirebaseOptions options = null;
-	 FileInputStream archivoConfiguracion;
+	
 	
     @SuppressWarnings("unused")
 	public void execute(JobExecutionContext ctx) throws JobExecutionException {
     	System.out.printf("INICIAMOS EJECUCION\n");
-    	 
-			try {
-				archivoConfiguracion = new FileInputStream(getFileFirebase());
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-			System.out.printf("antes de options\n");
-					options = new FirebaseOptions.Builder()
-							  .setServiceAccount(archivoConfiguracion)
-							  .setDatabaseUrl("https://hipoteca-multidivisa.firebaseio.com/")
-							  .build();
-					
-					
-		
-    			FirebaseApp.initializeApp(options);
-    			System.out.printf("despues de options\n");
-    			
-    			 try {
-						archivoConfiguracion.close();
-						System.out.println("CERRADO INPUT STREAM");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+    	
+     	FirebaseConfig inicioFirebase= FirebaseConfig.getInstance();
     			
        	
         System.out.printf(new Locale("es", "ESP"), "%tc Ejecutando tarea...%n", new java.util.Date());
@@ -79,14 +57,16 @@ public class Tarea implements Job{
        
         DatabaseReference usersRef = ref.child(getDate(resultado.getTimestamp()));
 
-        Map<String, Divisa> divisa = new HashMap<String, Divisa>();
-        divisa.put(getDate(resultado.getTimestamp()) , resultado);
+       /* Map<String, Divisa> divisa = new HashMap<String, Divisa>();
+        divisa.put(getDate(resultado.getTimestamp()) , resultado);*/
 
-        usersRef.setValue(divisa);
+        usersRef.setValue(resultado);
             
         System.out.println("hemos llegado al final");
-       
         
+       
+       
+       
        
          
     }
@@ -102,17 +82,7 @@ public class Tarea implements Job{
 
 
 
-	private String getFileFirebase() {
-    	String uno="Hipoteca Multidivisa-c09bbaf59b2f.json";
-    	String dos="hola.json";
-    	
-    	System.out.printf("iniciamos lectura\n");
-    	ClassLoader classLoader = getClass().getClassLoader();
-    	File file = new File(classLoader.getResource(dos).getFile());
-    	 System.out.printf(file.toString()+"\n");
-    	
-    	return file.toString(); 
-	}
+	
 
 
 
