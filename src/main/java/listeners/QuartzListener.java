@@ -52,7 +52,8 @@ public class QuartzListener extends QuartzInitializerListener implements Servlet
 	            scheduler.start();
 	            LOG.info("INICIAMOS SCHEDULER");
 	            
-	          
+	          //cron minuto = 0 0/1 * 1/1 * ? *
+	            //cron hora = 0 0 0/1 1/1 * ? *
 
 	       
 	         

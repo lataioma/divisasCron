@@ -56,23 +56,85 @@ public class Tarea implements Job{
 		
        
         DatabaseReference usersRef = ref.child(getDate(resultado.getTimestamp()));
-
-       /* Map<String, Divisa> divisa = new HashMap<String, Divisa>();
-        divisa.put(getDate(resultado.getTimestamp()) , resultado);*/
-
         usersRef.setValue(resultado);
+        
+        irAPagina("http://pruebamanel-lataioma.rhcloud.com/","HTTP");
             
         System.out.println("hemos llegado al final");
-        
-       
-       
        
        
          
     }
     
  
-    private String getDate(long timestamp) {
+    private void irAPagina(String param, String protocolo) {
+    	
+    
+    	String responce = "";
+        Divisa divisa = null;
+
+        BufferedReader rd = null;
+
+        try {
+
+            URL url = new URL(param);
+
+            if (protocolo.equals("HTTPS")) {
+
+                HttpsURLConnection conn1 = (HttpsURLConnection) url.openConnection();
+
+
+                rd = new BufferedReader(new InputStreamReader(conn1.getInputStream()));
+                
+                
+
+            } else {
+
+                URLConnection conn2 = url.openConnection();
+
+                rd = new BufferedReader(new InputStreamReader(conn2.getInputStream()));
+
+            }
+
+
+            StringBuilder responseStrBuilder = new StringBuilder();
+
+            String inputStr;
+            while ((inputStr = rd.readLine()) != null)
+                responseStrBuilder.append(inputStr);
+            
+            System.out.print(responseStrBuilder.toString());
+            
+            
+            
+            
+        } catch (Exception e) {
+
+            System.out.println("Web request failed");
+
+        // Web request failed
+
+        } finally {
+
+            if (rd != null) {
+
+                try {
+
+                    rd.close();
+
+                } catch (IOException ex) {
+
+                    System.out.println("Problema al cerrar el objeto lector");
+
+                }
+
+            }
+
+        }
+	}
+
+
+	private String getDate(long timestamp) {
     	long timeMilisegons = timestamp* 1000; 
     	SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     	String dateString  = dateFormat.format(timeMilisegons);
