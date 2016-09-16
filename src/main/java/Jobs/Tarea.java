@@ -49,30 +49,28 @@ public class Tarea implements Job{
          Divisa resultado = conexionGET("https://openexchangerates.org/api/latest.json?app_id=cf9ec84e98574bb7bd65d94434162332&base=USD","HTTPS");
         
          
-         
+         //HISTORICO
         System.out.printf("vamos a ver "+resultado.getRates().EUR+"\n");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-		DatabaseReference ref = database.getReference("server/historico");
-		
-       
+		DatabaseReference ref = database.getReference("server/historical/currencies/");
         DatabaseReference usersRef = ref.child(getDate(resultado.getTimestamp()));
         usersRef.setValue(resultado);
         
-        irAPagina("http://pruebamanel-lataioma.rhcloud.com/","HTTP");
+        //ULTIMO
+        DatabaseReference refLast = database.getReference("server/last/currencies/");       
+        refLast.setValue(resultado);
+        
+        
+        
+        irAPagina("http://pruebamanel-lataioma.rhcloud.com/edit","HTTP");
             
         System.out.println("hemos llegado al final");
-       
-       
-         
+              
     }
     
  
     private void irAPagina(String param, String protocolo) {
-    	
-    
     	String responce = "";
-        Divisa divisa = null;
-
         BufferedReader rd = null;
 
         try {
@@ -96,17 +94,9 @@ public class Tarea implements Job{
 
             }
 
-
-            StringBuilder responseStrBuilder = new StringBuilder();
-
-            String inputStr;
-            while ((inputStr = rd.readLine()) != null)
-                responseStrBuilder.append(inputStr);
+          
             
-            System.out.print(responseStrBuilder.toString());
-            
-            
-            
+            System.out.print("HEMOS IDO A LA PAGINA");
             
         } catch (Exception e) {
 
@@ -136,7 +126,7 @@ public class Tarea implements Job{
 
 	private String getDate(long timestamp) {
     	long timeMilisegons = timestamp* 1000; 
-    	SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    	SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     	String dateString  = dateFormat.format(timeMilisegons);
     	System.out.println(dateString);
 		return dateString;

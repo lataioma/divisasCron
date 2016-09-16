@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import Jobs.Tarea;
+import Jobs.TareaLibor;
 
 
 
@@ -44,20 +45,43 @@ public class QuartzListener extends QuartzInitializerListener implements Servlet
 	        StdSchedulerFactory factory = (StdSchedulerFactory) ctx.getAttribute(QUARTZ_FACTORY_KEY);
 	        try {
 	            Scheduler scheduler = factory.getScheduler();
-	            JobDetail job = JobBuilder.newJob(Tarea.class).build();
-	            Trigger trigger = TriggerBuilder.newTrigger().withIdentity("simple").withSchedule(
-	                    CronScheduleBuilder.cronSchedule("0 0 0/1 1/1 * ? *")
-	            ).startNow().build();
-	            scheduler.scheduleJob(job, trigger);
+	            
+	            JobDetail jobDivisa = JobBuilder.newJob(Tarea.class)
+	            		.withIdentity("job1","group1")
+	            		.build();
+	            		
+	            Trigger triggerDivisa =  TriggerBuilder.newTrigger()
+	            		.withIdentity("trigger1","group1")
+	            		.withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 1/1 * ? *"))	            		
+	            		.startNow()	            			
+	            		.build();
+	           
+	            scheduler.scheduleJob(jobDivisa, triggerDivisa);
 	            scheduler.start();
-	            LOG.info("INICIAMOS SCHEDULER");
+	            
+	            
+	            LOG.info("INICIAMOS SCHEDULER PRIMERA TAREA");
+	            
+	            
+	            JobDetail jobLibor = JobBuilder.newJob(TareaLibor.class)
+	            		.withIdentity("job2","group2")
+	            		.build();
+	            		
+	            Trigger triggerLibor =  TriggerBuilder.newTrigger()
+	            		.withIdentity("trigger2","group2")
+	            		.withSchedule(CronScheduleBuilder.cronSchedule("0 30 18 1/1 * ? *"))	            		
+	            		.startNow()	            			
+	            		.build();
+	            
+	            
+	            scheduler.scheduleJob(jobLibor, triggerLibor);
+	            scheduler.start();
+	            LOG.debug("INICIAMOS SEGUNDA TAREA");
 	            
 	          //cron minuto = 0 0/1 * 1/1 * ? *
 	            //cron hora = 0 0 0/1 1/1 * ? *
+	            //cron diario a las 18:30 = 0 30 18 1/1 * ? *
 
-	       
-	         
-	         LOG.info("PARAMOS  SCHEDULER");
 	        } catch (Exception e) {
 	            LOG.error("Ocurri\u00f3 un error al calendarizar el trabajo", e);
 	        }

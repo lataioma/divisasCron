@@ -52,6 +52,14 @@
     <artifactId>quartz</artifactId>
     <version>2.2.1</version>
 </dependency>
+
+<!-- https://mvnrepository.com/artifact/com.squareup.okhttp/okhttp -->
+<dependency>
+    <groupId>com.squareup.okhttp</groupId>
+    <artifactId>okhttp</artifactId>
+    <version>2.7.5</version>
+</dependency>
+
 		
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
 <dependency>
