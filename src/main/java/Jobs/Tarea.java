@@ -62,7 +62,7 @@ public class Tarea implements Job{
         
         
         
-        irAPagina("http://pruebamanel-lataioma.rhcloud.com/edit","HTTP");
+        irAPagina("http://pruebamanel-lataioma.rhcloud.com","HTTP");
             
         System.out.println("hemos llegado al final");
               

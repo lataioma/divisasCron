@@ -69,7 +69,7 @@ public class QuartzListener extends QuartzInitializerListener implements Servlet
 	            		
 	            Trigger triggerLibor =  TriggerBuilder.newTrigger()
 	            		.withIdentity("trigger2","group2")
-	            		.withSchedule(CronScheduleBuilder.cronSchedule("0 30 18 1/1 * ? *"))	            		
+	            		.withSchedule(CronScheduleBuilder.cronSchedule("0 40 11 1/1 * ? *"))	            		
 	            		.startNow()	            			
 	            		.build();
 	            
@@ -81,6 +81,7 @@ public class QuartzListener extends QuartzInitializerListener implements Servlet
 	          //cron minuto = 0 0/1 * 1/1 * ? *
 	            //cron hora = 0 0 0/1 1/1 * ? *
 	            //cron diario a las 18:30 = 0 30 18 1/1 * ? *
+	            //cron diario a las 11:40 = 0 40 11 1/1 * ? *
 
 	        } catch (Exception e) {
 	            LOG.error("Ocurri\u00f3 un error al calendarizar el trabajo", e);
